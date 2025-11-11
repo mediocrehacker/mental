@@ -1,1 +1,3 @@
-// TODO: Only for folder structure.. Add here your logic.
+export * as PHQ from "./managed/phq/contract/index.cjs";
+export * from "./witnesses";
+

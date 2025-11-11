@@ -1,0 +1,16 @@
+pragma language_version >= 0.18 && <= 0.19;
+
+import CompactStandardLibrary;
+
+// public state
+export ledger depressionLevel: Uint<8>;
+export ledger depressionRespondents: Counter;
+
+witness averageLevelDepression(): Uint<8>;
+
+export circuit depressionCheckup(): Uint<8> {
+  depressionLevel = disclose(averageLevelDepression());
+  depressionRespondents.increment(1);
+
+  return depressionLevel;
+}

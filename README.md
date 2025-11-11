@@ -1,5 +1,6 @@
 # 🌙 Midnight Quick Starter Template
 
+
 > **Base template for blockchain projects on Midnight Network** - A complete and modern template for developing decentralized applications (dApps) with smart contracts, backend APIs, CLI tools, and user interfaces.
 
 ## 📋 Table of Contents
