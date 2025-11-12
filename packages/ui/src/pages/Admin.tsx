@@ -1,15 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout"
-
+import WalletButton from "../components/WalletButton";
 
 export const Admin = () => {
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+    const handleConnect = async () => {
+    let isConnected = false;
+    let address = null;
+    try {
+      const connectorAPI = await window.midnight?.mnLace.enable();
+
+      const isEnabled = await window.midnight?.mnLace.isEnabled();
+      if (isEnabled) {
+        isConnected = true;
+        console.log("Connected to the wallet:", connectorAPI);
+        const state = await connectorAPI.state();
+        address = state.address;
+      }
+    } catch (error) {
+      console.log("An error occurred:", error.reason || error);
+    }
+
+    setIsConnected(isConnected);
+    setWalletAddress(address);
+  };
+
+  const handleDisconnect = () => {
+    setWalletAddress(null);
+    setIsConnected(false);
+  };
+
   return (
+      
     <>
-      <Layout>
-        <Dashboard />
-      </Layout>
+      <Layout
+        navbar={<WalletButton
+          isConnected={isConnected}
+          walletAddress={walletAddress}
+          onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
+        />}
+        center={<Dashboard />}
+      /> 
     </>
-  )
+  );
+
 }
 
 const Dashboard = () => {
