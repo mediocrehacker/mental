@@ -42,11 +42,22 @@ export const Admin = () => {
           onConnect={handleConnect}
           onDisconnect={handleDisconnect}
         />}
-        center={isConnected  ? <Dashboard /> : <DashboardLoading />}
+        // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
+        center={<DeployContract />}
       /> 
     </>
   );
 
+}
+
+const DeployContract = () => {
+  return (
+    <>
+      <div className="flex w-full">
+        <button className="btn">TBD: Deploy Contract</button>
+      </div>
+    </>
+  )
 }
 
 const Dashboard = () => {
