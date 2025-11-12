@@ -42,7 +42,7 @@ export const Admin = () => {
           onConnect={handleConnect}
           onDisconnect={handleDisconnect}
         />}
-        center={<Dashboard />}
+        center={isConnected  ? <Dashboard /> : <DashboardLoading />}
       /> 
     </>
   );
@@ -52,7 +52,7 @@ export const Admin = () => {
 const Dashboard = () => {
   return (
     <>
-      <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center">
+      <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
         <div className="col-span-3 col-start-2 place-items-center gap-4">
             <div className="radial-progress  m-8"
               style={{ "--value": "70", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
@@ -70,11 +70,44 @@ const Dashboard = () => {
   )
 }
 
+const DashboardLoading = () => {
+  return (
+    <>
+      <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
+        <div className="col-span-3 col-start-2 place-items-center gap-4">
+            <div className="skeleton radial-progress  m-8"
+              style={{ "--value": "100", "--size": "12rem", "--thickness": "0px" } /* as React.CSSProperties */ } 
+              aria-valuenow={70} role="progressbar"></div>
+            <h2 className="text-2xl">Mental Score</h2>
+        </div>
+        
+        <div className="col-span-2 row-start-2"><RatingLoading rating={{ name: "Depression", mask: "mask-star-2"}} /></div>
+        <div className="col-span-2 col-start-4 row-start-2"><RatingLoading rating={{ name: "Anxiety", mask: "mask-heart"}} /></div>
+        <div className="col-span-2 row-start-3"><RatingLoading rating={{ name: "Somatic", mask: "mask-star-2"}} /></div>
+        <div className="col-span-2 col-start-4 row-start-3"><RatingLoading rating={{ name: "Burnout", mask: "mask-star-2"}} /></div>
+        <div className="col-span-5 row-start-4"></div>
+      </div>
+    </>
+  )
+}
+
+
 const Rating = ({rating}) => {
   return(
     <>
       <div className="place-items-center">
         <progress className="progress  w-76" value="70" max="100"></progress>
+        <h2 className="text-xl">{rating.name}</h2>
+      </div>
+    </>
+  )
+}
+  
+const RatingLoading = ({rating}) => {
+  return(
+    <>
+      <div className="place-items-center">
+        <progress className="progress  w-76"></progress>
         <h2 className="text-xl">{rating.name}</h2>
       </div>
     </>
