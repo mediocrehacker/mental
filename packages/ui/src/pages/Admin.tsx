@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
-import * as api from '@quick-starter/quick-starter-api';
+import { deploy } from '@quick-starter/quick-starter-api';
 
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);

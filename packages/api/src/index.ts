@@ -25,7 +25,6 @@ import { type CoinInfo, nativeToken, Transaction, type TransactionId } from '@mi
 import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
-import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
 import {
   type BalancedTransaction,
   createBalancedTx,
@@ -330,19 +329,19 @@ export const randomBytes = (length: number): Uint8Array => {
 export const buildFreshWallet = async (config: Config): Promise<Wallet & Resource> =>
   await buildWalletAndWaitForFunds(config, toHex(randomBytes(32)), '');
 
-export const configureProviders = async (wallet: Wallet & Resource, config: Config) => {
-  const walletAndMidnightProvider = await createWalletAndMidnightProvider(wallet);
-  return {
-    privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
-      privateStateStoreName: contractConfig.privateStateStoreName,
-    }),
-    publicDataProvider: indexerPublicDataProvider(config.indexer, config.indexerWS),
-    zkConfigProvider: new NodeZkConfigProvider<'depressionCheckup'>(contractConfig.zkConfigPath),
-    proofProvider: httpClientProofProvider(config.proofServer),
-    walletProvider: walletAndMidnightProvider,
-    midnightProvider: walletAndMidnightProvider,
-  };
-};
+// export const configureProviders = async (wallet: Wallet & Resource, config: Config) => {
+//   const walletAndMidnightProvider = await createWalletAndMidnightProvider(wallet);
+//   return {
+//     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+//       privateStateStoreName: contractConfig.privateStateStoreName,
+//     }),
+//     publicDataProvider: indexerPublicDataProvider(config.indexer, config.indexerWS),
+//     zkConfigProvider: new NodeZkConfigProvider<'depressionCheckup'>(contractConfig.zkConfigPath),
+//     proofProvider: httpClientProofProvider(config.proofServer),
+//     walletProvider: walletAndMidnightProvider,
+//     midnightProvider: walletAndMidnightProvider,
+//   };
+// };
 
 export function setLogger(_logger: Logger) {
   logger = _logger;

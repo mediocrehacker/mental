@@ -19,10 +19,19 @@ import { stdin as input, stdout as output } from 'node:process';
 import { createInterface, type Interface } from 'node:readline/promises';
 import { type Logger } from 'pino';
 import { type StartedDockerComposeEnvironment, type DockerComposeEnvironment } from 'testcontainers';
-import { type PHQProviders, type DeployedPHQContract } from './common-types';
-import { type Config, StandaloneConfig } from './config';
 import * as api from '@quick-starter/quick-starter-api';
 import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
+import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
+import { type Config, contractConfig, StandaloneConfig } from './config';
+import {
+  type PHQContract,
+  type PHQPrivateStateId,
+  type PHQProviders,
+  type DeployedPHQContract,
+} from './common-types';
+import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
+import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 
 let logger: Logger;
 
@@ -145,6 +154,20 @@ const mapContainerPort = (env: StartedDockerComposeEnvironment, url: string, con
   return mappedUrl.toString().replace(/\/+$/, '');
 };
 
+export const configureProviders = async (wallet: Wallet & Resource, config: Config) => {
+  const walletAndMidnightProvider = await api.createWalletAndMidnightProvider(wallet);
+  return {
+    privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+      privateStateStoreName: contractConfig.privateStateStoreName,
+    }),
+    publicDataProvider: indexerPublicDataProvider(config.indexer, config.indexerWS),
+    zkConfigProvider: new NodeZkConfigProvider<'depressionCheckup'>(contractConfig.zkConfigPath),
+    proofProvider: httpClientProofProvider(config.proofServer),
+    walletProvider: walletAndMidnightProvider,
+    midnightProvider: walletAndMidnightProvider,
+  };
+};
+
 export const run = async (config: Config, _logger: Logger, dockerEnv?: DockerComposeEnvironment): Promise<void> => {
   logger = _logger;
   api.setLogger(_logger);
@@ -163,7 +186,7 @@ export const run = async (config: Config, _logger: Logger, dockerEnv?: DockerCom
   const wallet = await buildWallet(config, rli);
   try {
     if (wallet !== null) {
-      const providers = await api.configureProviders(wallet, config);
+      const providers = await configureProviders(wallet, config);
       await mainLoop(providers, rli);
     }
   } catch (e) {
