@@ -21,8 +21,9 @@ import { type Logger } from 'pino';
 import { type StartedDockerComposeEnvironment, type DockerComposeEnvironment } from 'testcontainers';
 import { type PHQProviders, type DeployedPHQContract } from './common-types';
 import { type Config, StandaloneConfig } from './config';
-import * as api from '@quick-starter/quick-starter-api';
+import * as api from './api';
 import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
 
 let logger: Logger;
 

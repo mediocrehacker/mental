@@ -41,7 +41,7 @@ const Layout = ({navbar, center}) => {
               <li>
                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
                   {/* Dashboard icon */}
-                  <svg className="size-4 opacity-50" width="16" height="16" viewBox="0 0 48 48" fill="none" strokeWidth="2" xmlns="http://www.w3.org/2000/svg"><path d="M20 29H6V43H20V29Z" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="bevel"></path><path d="M24 4L34 21H14L24 4Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="butt" stroke-linejoin="bevel"></path><path d="M36 44C40.4183 44 44 40.4183 44 36C44 31.5817 40.4183 28 36 28C31.5817 28 28 31.5817 28 36C28 40.4183 31.5817 44 36 44Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="butt" stroke-linejoin="bevel"></path></svg>
+                  <svg className="size-4 opacity-50" width="16" height="16" viewBox="0 0 48 48" fill="none" strokeWidth="2" xmlns="http://www.w3.org/2000/svg"><path d="M20 29H6V43H20V29Z" fill="none" stroke="currentColor" strokeLinecap="butt" strokeLinejoin="bevel"></path><path d="M24 4L34 21H14L24 4Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="butt" strokeLinejoin="bevel"></path><path d="M36 44C40.4183 44 44 40.4183 44 36C44 31.5817 40.4183 28 36 28C31.5817 28 28 31.5817 28 36C28 40.4183 31.5817 44 36 44Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="butt" strokeLinejoin="bevel"></path></svg>
                   <span className="is-drawer-close:hidden">Dashboard</span>
                 </button>
               </li>
@@ -59,7 +59,7 @@ const Layout = ({navbar, center}) => {
               <li>
                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Feedback">
                   {/* Feedback icon */}
-                  <svg  className="my-1.5 inline-block size-4" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H44V36H29L24 41L19 36H4V6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="butt" stroke-linejoin="bevel"></path><path d="M23 21H25.0025" stroke="currentColor" stroke-width="4" stroke-linecap="butt"></path><path d="M33.001 21H34.9999" stroke="currentColor" stroke-width="4" stroke-linecap="butt"></path><path d="M13.001 21H14.9999" stroke="currentColor" stroke-width="4" stroke-linecap="butt"></path></svg>
+                  <svg  className="my-1.5 inline-block size-4" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H44V36H29L24 41L19 36H4V6Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="butt" strokeLinejoin="bevel"></path><path d="M23 21H25.0025" stroke="currentColor" strokeWidth="4" strokeLinecap="butt"></path><path d="M33.001 21H34.9999" stroke="currentColor" strokeWidth="4" strokeLinecap="butt"></path><path d="M13.001 21H14.9999" stroke="currentColor" strokeWidth="4" strokeLinecap="butt"></path></svg>
                   <span className="is-drawer-close:hidden">Feedback</span>
                 </button>
               </li>

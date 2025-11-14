@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
-import * as api from '@quick-starter/quick-starter-api';
+// import DeployButton from "../components/DeployButton";
+
+import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
+import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
+import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
+import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
+import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
+
 
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [contract, setContract] = useState('');
 
-    const handleConnect = async () => {
+  const handleConnect = async () => {
     let isConnected = false;
     let address = null;
     try {
@@ -33,28 +42,40 @@ export const Admin = () => {
     setIsConnected(false);
   };
 
-  const onDeploy: () => Promise<void> = async () => {
-    // const contract: IdentityRegistryContract = new Contract({});
+  // useEffect(() => {
+  // }, []);
 
-    // if (midnightWallet.walletAPI) {
-    //   const midnightProviders = providers(
-    //     midnightWallet.publicDataProvider,
-    //     midnightWallet.walletProvider,
-    //     midnightWallet.midnightProvider,
-    //     midnightWallet.walletAPI,
-    //     midnightWallet.callback,
-    //   );
-    //   await midnightProviders.privateStateProvider.set('coin', {});
-    //   const deployedContract: DeployedIdentityRegistry = await deployContract(midnightProviders, {
-    //     privateStateKey: 'coin',
-    //     contract,
-    //     initialPrivateState: {},
-    //   });
+  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+  //   return {
+  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+  //       privateStateStoreName:  'quick-starter-private-state',
+  //     }),
+  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+  //     walletProvider: walletAndMidnightProvider,
+  //     midnightProvider: walletAndMidnightProvider,
+  //   };
+  // };
 
-    //   logger.info('deployed at', deployedContract.deployTxData.public.contractAddress);
-    // }
-    
+
+  const handleDeploy = async () => {
+    try {
+      const wallet = await window.midnight?.mnLace;
+      getProviders(wallet)
+    } catch (error) {
+      console.log("An error occurred while deploy:", error.reason || error);
+    }
+
+    setContract("data.access_contract");
   };
+
+
+//   const onDeploy: () => Promise<void> = async () => {
+//     const provider = getProviders(window.midnight);
+//     let d = await deploy(providers, createPHQPrivateState());
+// deploy
+//   };
   
   return (
       
@@ -67,19 +88,20 @@ export const Admin = () => {
           onDisconnect={handleDisconnect}
         />}
         // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        center={<DeployContract />}
+        center={<DeployContract contract={contract} handleDeploy={handleDeploy} />}
       /> 
     </>
   );
 
 }
 
-const DeployContract = () => {
+const DeployContract = ({contract, handleDeploy}) => {
   return (
     <>
       <div className="flex w-full">
-        <button className="btn">TBD: Deploy Contract</button>
+        <button className="btn" onClick={handleDeploy} >TBD: Deploy Contract</button>
       </div>
+      <p>{contract}</p>
     </>
   )
 }

@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
+// import topLevelAwait from "vite-plugin-top-level-await";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,7 +13,7 @@ export default defineConfig({
     target: "esnext",
     minify: false,
   },
-  plugins: [react(), tailwindcss(), wasm(), topLevelAwait(), viteCommonjs()],
+  plugins: [react(), tailwindcss(), wasm(), viteCommonjs()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

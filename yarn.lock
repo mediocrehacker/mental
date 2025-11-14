@@ -2868,6 +2868,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/semver@npm:^7":
+  version: 7.7.1
+  resolution: "@types/semver@npm:7.7.1"
+  checksum: 10c0/c938aef3bf79a73f0f3f6037c16e2e759ff40c54122ddf0b2583703393d8d3127130823facb880e694caa324eb6845628186aac1997ee8b31dc2d18fafe26268
+  languageName: node
+  linkType: hard
+
 "@types/ssh2-streams@npm:*":
   version: 0.1.12
   resolution: "@types/ssh2-streams@npm:0.1.12"
@@ -10713,14 +10720,15 @@ __metadata:
   resolution: "quick-starter-ui@workspace:packages/ui"
   dependencies:
     "@eslint/js": "npm:^9.39.1"
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "npm:^2.0.2"
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@quick-starter/phq-contract": "workspace:*"
-    "@quick-starter/quick-starter-api": "workspace:*"
     "@tailwindcss/vite": "npm:^4.1.17"
     "@types/node": "npm:^24.10.0"
     "@types/progress": "npm:^2.0.7"
     "@types/react": "npm:^19.2.2"
     "@types/react-dom": "npm:^19.2.2"
+    "@types/semver": "npm:^7"
     "@vitejs/plugin-react": "npm:^5.1.0"
     assert: "npm:^2.1.0"
     badge: "npm:^1.0.3"
@@ -10750,6 +10758,7 @@ __metadata:
     react-dom: "npm:^19.2.0"
     react-hot-toast: "npm:^2.6.0"
     react-router: "npm:^7.9.5"
+    semver: "npm:^7.7.3"
     shadcn: "npm:^3.5.0"
     stream-browserify: "npm:^3.0.0"
     stream-http: "npm:^3.2.0"
