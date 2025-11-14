@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
+import * as api from '@quick-starter/quick-starter-api';
 
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -32,6 +33,29 @@ export const Admin = () => {
     setIsConnected(false);
   };
 
+  const onDeploy: () => Promise<void> = async () => {
+    // const contract: IdentityRegistryContract = new Contract({});
+
+    // if (midnightWallet.walletAPI) {
+    //   const midnightProviders = providers(
+    //     midnightWallet.publicDataProvider,
+    //     midnightWallet.walletProvider,
+    //     midnightWallet.midnightProvider,
+    //     midnightWallet.walletAPI,
+    //     midnightWallet.callback,
+    //   );
+    //   await midnightProviders.privateStateProvider.set('coin', {});
+    //   const deployedContract: DeployedIdentityRegistry = await deployContract(midnightProviders, {
+    //     privateStateKey: 'coin',
+    //     contract,
+    //     initialPrivateState: {},
+    //   });
+
+    //   logger.info('deployed at', deployedContract.deployTxData.public.contractAddress);
+    // }
+    
+  };
+  
   return (
       
     <>

@@ -1,13 +1,13 @@
 {
   "include": ["src/**/*.ts", "src/test/jest.setup.ts"],
   "compilerOptions": {
-    "rootDir": "src",
+    // "rootDir": "src",
     "outDir": "dist",
     "declaration": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext"],
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
@@ -16,6 +16,7 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "."
   }
 }
