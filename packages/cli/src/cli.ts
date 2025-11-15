@@ -154,12 +154,12 @@ export const run = async (config: Config, _logger: Logger, dockerEnv?: DockerCom
   // if (dockerEnv !== undefined) {
   //   env = await dockerEnv.up();
 
-  //   // if (config instanceof StandaloneConfig) {
-  //   //   config.indexer = mapContainerPort(env, config.indexer, 'counter-indexer');
-  //   //   config.indexerWS = mapContainerPort(env, config.indexerWS, 'counter-indexer');
-  //   //   config.node = mapContainerPort(env, config.node, 'counter-node');
-  //   //   config.proofServer = mapContainerPort(env, config.proofServer, 'counter-proof-server');
-  //   // }
+  //   if (config instanceof StandaloneConfig) {
+  //     config.indexer = mapContainerPort(env, config.indexer, 'counter-indexer');
+  //     config.indexerWS = mapContainerPort(env, config.indexerWS, 'counter-indexer');
+  //     config.node = mapContainerPort(env, config.node, 'counter-node');
+  //     config.proofServer = mapContainerPort(env, config.proofServer, 'counter-proof-server');
+  //   }
   // }
   const wallet = await buildWallet(config, rli);
   try {

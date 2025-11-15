@@ -80,34 +80,43 @@ export type DeployedPHQContract = DeployedContract<PHQContract> | FoundContract<
 
 export const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
 
-// export const joinContract = async (
-//   providers: PHQProviders,
-//   contractAddress: string,
-// ): Promise<DeployedPHQContract> => {
+export const joinContract = async (
+  providers: PHQProviders,
+  contractAddress: string,
+): Promise<DeployedPHQContract> => {
 
-//   const privateState: PHQPrivateState = createPHQPrivateState();
-  
-//   const options = {
-//     contractAddress,
-//     contract: phqContractInstance,
-//     privateStateId: 'phqPrivateState',
-//     initialPrivateState: privateState,
-//   }
+  console.log("Hello");
 
-//   const phqContract = await findDeployedContract(providers, options);
-//   logger.info(`Joined contract at address: ${phqContract.deployTxData.public.contractAddress}`);
-//   return phqContract;
-// };
+  const privateState: PHQPrivateState = createPHQPrivateState();
+
+  console.log(privateState);
+
+  const options = {
+    contractAddress,
+    contract: phqContractInstance,
+    privateStateId: 'phqPrivateState',
+    initialPrivateState: privateState,
+  }
+
+  const phqContract = await findDeployedContract(providers, options);
+  console.log(`Joined contract at address: ${phqContract.deployTxData.public.contractAddress}`);
+  return phqContract;
+};
 
 export const deploy = async (
   providers: PHQProviders,
   privateState: PHQPrivateState,
 ): Promise<DeployedPHQContract> => {
+  console.log("phqContract");
+
   const phqContract = await deployContract(providers, {
     contract: phqContractInstance,
     privateStateId: 'phqPrivateState',
     initialPrivateState: privateState,
   });
+
+  console.log(phqContract);
+
   return phqContract;
 };
 

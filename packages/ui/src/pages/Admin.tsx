@@ -5,13 +5,13 @@ import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id'
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { pipe as fnPipe } from 'fp-ts/function';
 import { pino, type Logger } from 'pino';
-import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
+// import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-import { deploy } from '@quick-starter/quick-starter-api';
+import { deploy, joinContract } from '@quick-starter/quick-starter-api';
 import { type PHQPrivateState, createPHQPrivateState, witnesses, setPHQPrivateState } from '@quick-starter/phq-contract';
 // import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
 // const { createPHQPrivateState, setPHQPrivateState } = contractModule;
@@ -88,6 +88,9 @@ export const Admin = () => {
       // const wallet = await window.midnight?.mnLace;
       // const providers = await getProviders(wallet);
       const deployedContract = await deploy(providers, privateState)
+      // const addr = "0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7"
+      // console.log("Address:", addr);
+      // const contract = await joinContract(providers, addr)
       
       console.log("Providers:", providers);
     } catch (error) {
