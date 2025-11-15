@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-// import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-// import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
-// import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
-// import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
-// import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
-// import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
+// import DeployButton from "../components/DeployButton";
+
+import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
+import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
+import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
+import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
+import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 
 
 export const Admin = () => {
@@ -43,18 +45,18 @@ export const Admin = () => {
   // useEffect(() => {
   // }, []);
 
-  const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
-    return {
-      privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
-        privateStateStoreName:  'quick-starter-private-state',
-      }),
-      publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
-      zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
-      proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
-      walletProvider: walletAndMidnightProvider,
-      midnightProvider: walletAndMidnightProvider,
-    };
-  };
+  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+  //   return {
+  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+  //       privateStateStoreName:  'quick-starter-private-state',
+  //     }),
+  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+  //     walletProvider: walletAndMidnightProvider,
+  //     midnightProvider: walletAndMidnightProvider,
+  //   };
+  // };
 
 
   const handleDeploy = async () => {

@@ -10720,9 +10720,9 @@ __metadata:
   resolution: "quick-starter-ui@workspace:packages/ui"
   dependencies:
     "@eslint/js": "npm:^9.39.1"
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "npm:^2.0.2"
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@quick-starter/phq-contract": "workspace:*"
-    "@quick-starter/quick-starter-api": "workspace:*"
     "@tailwindcss/vite": "npm:^4.1.17"
     "@types/node": "npm:^24.10.0"
     "@types/progress": "npm:^2.0.7"

@@ -11,8 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^2.0.2",
     "@quick-starter/phq-contract": "workspace:*",
-    "@quick-starter/quick-starter-api": "workspace:*",
     "@tailwindcss/vite": "^4.1.17",
     "badge": "^1.0.3",
     "button": "^1.1.1",
