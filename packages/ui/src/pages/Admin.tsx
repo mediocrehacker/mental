@@ -4,8 +4,10 @@ import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-// import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
+// import * as api from '@quick-starter/quick-starter-api';
 // import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
+// const { createPHQPrivateState, setPHQPrivateState } = contractModule;
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
@@ -45,24 +47,27 @@ export const Admin = () => {
   // useEffect(() => {
   // }, []);
 
-  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
-  //   return {
-  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
-  //       privateStateStoreName:  'quick-starter-private-state',
-  //     }),
-  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
-  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
-  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
-  //     walletProvider: walletAndMidnightProvider,
-  //     midnightProvider: walletAndMidnightProvider,
-  //   };
-  // };
+  const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+    return {
+      privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+        privateStateStoreName:  'quick-starter-private-state',
+      }),
+      publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+      zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+      proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+      walletProvider: walletAndMidnightProvider,
+      midnightProvider: walletAndMidnightProvider,
+    };
+  };
 
 
   const handleDeploy = async () => {
     try {
       const wallet = await window.midnight?.mnLace;
-      getProviders(wallet)
+      const providers = await getProviders(wallet);
+
+      console.log("Api:", api);
+      console.log("Providers:", providers);
     } catch (error) {
       console.log("An error occurred while deploy:", error.reason || error);
     }

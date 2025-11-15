@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from "@tailwindcss/vite";
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
-// import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,6 +29,8 @@ export default defineConfig({
     },
   },
   plugins: [
+    viteCommonjs(),
+    nodePolyfills(),
     react(),
     // Configure WASM plugin with more options
     wasm(),

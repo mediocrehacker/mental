@@ -1,7 +1,7 @@
 
 import path from 'node:path';
 import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
-import { QuickStarterPrivateStateId } from '@quick-starter/quick-starter-api';
+import { QuickStarterPrivateStateId } from './api';
 
 export const currentDir = path.resolve(new URL(import.meta.url).pathname, '..');
 

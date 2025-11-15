@@ -399,3 +399,5 @@ export const saveState = async (wallet: Wallet, filename: string) => {
     logger.info('Not saving cache as sync cache was not defined');
   }
 };
+
+export const QuickStarterPrivateStateId = 'quick-starter-private-state';

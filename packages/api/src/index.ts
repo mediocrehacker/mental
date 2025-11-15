@@ -1,6 +1,5 @@
 // TODO: Only for folder structure. Adjust QuickStarterPrivateStateId based on your implementation. 
 // Common types and constants
-export const QuickStarterPrivateStateId = 'quick-starter-private-state';
 
 // This file is part of midnightntwrk/example-counter.
 // Copyright (C) 2025 Midnight Foundation
@@ -407,3 +406,4 @@ export const deploy = async (
 //   }
 // };
 
+// export const QuickStarterPrivateStateId = 'quick-starter-private-state';
