@@ -4,8 +4,8 @@ import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
-import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+// import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
+// import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
