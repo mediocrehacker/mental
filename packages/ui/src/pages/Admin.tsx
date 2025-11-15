@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+// import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
+// import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
-import { deploy } from '@quick-starter/quick-starter-api';
+// import { deploy, type PHQProviders, type PHQPrivateStateId } from '@quick-starter/quick-starter-api';
+// import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
+// import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
+// import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
+
 
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -33,28 +39,24 @@ export const Admin = () => {
     setIsConnected(false);
   };
 
-  const onDeploy: () => Promise<void> = async () => {
-    // const contract: IdentityRegistryContract = new Contract({});
+  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+  //   return {
+  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+  //       privateStateStoreName:  'quick-starter-private-state',
+  //     }),
+  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+  //     walletProvider: walletAndMidnightProvider,
+  //     midnightProvider: walletAndMidnightProvider,
+  //   };
+  // };
 
-    // if (midnightWallet.walletAPI) {
-    //   const midnightProviders = providers(
-    //     midnightWallet.publicDataProvider,
-    //     midnightWallet.walletProvider,
-    //     midnightWallet.midnightProvider,
-    //     midnightWallet.walletAPI,
-    //     midnightWallet.callback,
-    //   );
-    //   await midnightProviders.privateStateProvider.set('coin', {});
-    //   const deployedContract: DeployedIdentityRegistry = await deployContract(midnightProviders, {
-    //     privateStateKey: 'coin',
-    //     contract,
-    //     initialPrivateState: {},
-    //   });
-
-    //   logger.info('deployed at', deployedContract.deployTxData.public.contractAddress);
-    // }
-    
-  };
+//   const onDeploy: () => Promise<void> = async () => {
+//     const provider = getProviders(window.midnight);
+//     let d = await deploy(providers, createPHQPrivateState());
+// deploy
+//   };
   
   return (
       
@@ -66,8 +68,8 @@ export const Admin = () => {
           onConnect={handleConnect}
           onDisconnect={handleDisconnect}
         />}
-        // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        center={<DeployContract />}
+        center={isConnected  ? <Dashboard /> : <DashboardLoading />}
+        // center={<DeployContract />}
       /> 
     </>
   );
@@ -78,7 +80,7 @@ const DeployContract = () => {
   return (
     <>
       <div className="flex w-full">
-        <button className="btn">TBD: Deploy Contract</button>
+        <button className="btn" onClick={onDeploy}>TBD: Deploy Contract</button>
       </div>
     </>
   )
