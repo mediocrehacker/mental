@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
+
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { pipe as fnPipe } from 'fp-ts/function';
 import { pino, type Logger } from 'pino';
@@ -9,11 +11,8 @@ import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-// import { deploy } from '@quick-starter/quick-starter-api';
+import { deploy } from '@quick-starter/quick-starter-api';
 import { type PHQPrivateState, createPHQPrivateState, witnesses, setPHQPrivateState } from '@quick-starter/phq-contract';
-
-import * as PHQ  from '../../../contract/dist/managed/phq/contract/index.cjs';
-
 // import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
 // const { createPHQPrivateState, setPHQPrivateState } = contractModule;
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
@@ -67,23 +66,24 @@ export const Admin = () => {
   // useEffect(() => {
   // }, []);
 
-  const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
-  const privateState: PHQPrivateState = createPHQPrivateState();
+  // const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
+  // const privateState: PHQPrivateState = createPHQPrivateState();
 
-  const deploy = async (
-    providers: PHQProviders,
-    privateState: PHQPrivateState,
-  ): Promise<DeployedPHQContract> => {
-    const phqContract = await deployContract(providers, {
-      contract: phqContractInstance,
-      privateStateId: 'phqPrivateState',
-      initialPrivateState: privateState,
-    });
-    return phqContract;
-  };
+  // const deploy = async (
+  //   providers: PHQProviders,
+  //   privateState: PHQPrivateState,
+  // ): Promise<DeployedPHQContract> => {
+  //   const phqContract = await deployContract(providers, {
+  //     contract: phqContractInstance,
+  //     privateStateId: 'phqPrivateState',
+  //     initialPrivateState: privateState,
+  //   });
+  //   return phqContract;
+  // };
 
   const handleDeploy = async () => {
     try {
+      const privateState: PHQPrivateState = createPHQPrivateState();
       const providers = await initializeProviders(logger)
       // const wallet = await window.midnight?.mnLace;
       // const providers = await getProviders(wallet);
@@ -206,7 +206,11 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
   const walletState = await wallet.state();
   // const zkConfigPath = window.location.origin; // '../../../contract/src/managed/bboard';
 
-  console.log(`Connecting to wallet with network ID: ${getLedgerNetworkId()}`);
+      console.log(`Connecting to wallet with network ID: ${getLedgerNetworkId()}`);
+      console.log(`Connecting to wallet with network ID: ${getLedgerNetworkId()}`);
+      console.log(`Connecting to wallet with network ID: ${NetworkId.Undeployed}`);
+      console.log(`Connecting to wallet with network ID: ${NetworkId.TestNet}`);
+
 
   return {
     privateStateProvider: levelPrivateStateProvider({

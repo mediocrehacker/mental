@@ -19,7 +19,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type ContractAddress } from '@midnight-ntwrk/compact-runtime';
-import { PHQ, type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
+import { type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
+import * as PHQ  from '../../contract/dist/managed/phq/contract/index.cjs';
 import { type CoinInfo, nativeToken, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
 import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import {
@@ -77,7 +78,7 @@ export type DeployedPHQContract = DeployedContract<PHQContract> | FoundContract<
 
 
 
-export const phqContractInstance: PHQContract = new PHQ.Contract(witnesses);
+export const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
 
 // export const joinContract = async (
 //   providers: PHQProviders,
