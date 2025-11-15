@@ -43,11 +43,11 @@ import { WebSocket } from 'ws';
   // type PHQProviders,
   // type DeployedPHQContract,
 // } from './common-types';
-import { type Config, contractConfig } from './config';
+// import { type Config, contractConfig } from './config';
 import { assertIsContractAddress, toHex } from '@midnight-ntwrk/midnight-js-utils';
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
-import * as fsAsync from 'node:fs/promises';
-import * as fs from 'node:fs';
+// import * as fsAsync from 'node:fs/promises';
+// import * as fs from 'node:fs';
 
 // export const getPHQLedgerState = async (
 //   providers: PHQProviders,
@@ -406,4 +406,4 @@ export const deploy = async (
 //   }
 // };
 
-// export const QuickStarterPrivateStateId = 'quick-starter-private-state';
+export const QuickStarterPrivateStateId = 'quick-starter-private-state';

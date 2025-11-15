@@ -1,22 +1,41 @@
 import React, { useState, useEffect } from "react";
+
+import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
+import { pipe as fnPipe } from 'fp-ts/function';
+import { pino, type Logger } from 'pino';
+import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import Layout from "../components/Layout"
 import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-// import * as api from '@quick-starter/quick-starter-api';
-// import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
-import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
+// import { deploy } from '@quick-starter/quick-starter-api';
+import { type PHQPrivateState, createPHQPrivateState, witnesses, setPHQPrivateState } from '@quick-starter/phq-contract';
+
+import * as PHQ  from '../../../contract/dist/managed/phq/contract/index.cjs';
+
+// import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
 // const { createPHQPrivateState, setPHQPrivateState } = contractModule;
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
-
+import {
+  type DAppConnectorAPI,
+  type DAppConnectorWalletAPI,
+  type ServiceUriConfig,
+} from '@midnight-ntwrk/dapp-connector-api';
 
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [contract, setContract] = useState('');
+
+  const logger = pino({
+    browser: {
+      serialize: true,
+      asObject: true,
+    },
+  });
 
   const handleConnect = async () => {
     let isConnected = false;
@@ -27,6 +46,7 @@ export const Admin = () => {
       const isEnabled = await window.midnight?.mnLace.isEnabled();
       if (isEnabled) {
         isConnected = true;
+
         console.log("Connected to the wallet:", connectorAPI);
         const state = await connectorAPI.state();
         address = state.address;
@@ -47,26 +67,28 @@ export const Admin = () => {
   // useEffect(() => {
   // }, []);
 
-  const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
-    return {
-      privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
-        privateStateStoreName:  'quick-starter-private-state',
-      }),
-      publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
-      zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
-      proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
-      walletProvider: walletAndMidnightProvider,
-      midnightProvider: walletAndMidnightProvider,
-    };
-  };
+  const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
+  const privateState: PHQPrivateState = createPHQPrivateState();
 
+  const deploy = async (
+    providers: PHQProviders,
+    privateState: PHQPrivateState,
+  ): Promise<DeployedPHQContract> => {
+    const phqContract = await deployContract(providers, {
+      contract: phqContractInstance,
+      privateStateId: 'phqPrivateState',
+      initialPrivateState: privateState,
+    });
+    return phqContract;
+  };
 
   const handleDeploy = async () => {
     try {
-      const wallet = await window.midnight?.mnLace;
-      const providers = await getProviders(wallet);
-
-      console.log("Api:", api);
+      const providers = await initializeProviders(logger)
+      // const wallet = await window.midnight?.mnLace;
+      // const providers = await getProviders(wallet);
+      const deployedContract = await deploy(providers, privateState)
+      
       console.log("Providers:", providers);
     } catch (error) {
       console.log("An error occurred while deploy:", error.reason || error);
@@ -175,4 +197,67 @@ const RatingLoading = ({rating}) => {
     </>
   )
 }
+
+/** @internal */
+const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
+  const uris = await window.midnight?.mnLace.serviceUriConfig();
+  const wallet = await window.midnight?.mnLace.enable();
+
+  const walletState = await wallet.state();
+  // const zkConfigPath = window.location.origin; // '../../../contract/src/managed/bboard';
+
+  console.log(`Connecting to wallet with network ID: ${getLedgerNetworkId()}`);
+
+  return {
+    privateStateProvider: levelPrivateStateProvider({
+      privateStateStoreName: 'quick-starter-private-state',
+    }),
+    zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+    // zkConfigProvider: new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window)),
+    proofProvider: httpClientProofProvider(uris.proverServerUri),
+    publicDataProvider: indexerPublicDataProvider(uris.indexerUri, uris.indexerWsUri),
+    walletProvider: {
+      coinPublicKey: walletState.coinPublicKey,
+      encryptionPublicKey: walletState.encryptionPublicKey,
+      balanceTx(tx: UnbalancedTransaction, newCoins: CoinInfo[]): Promise<BalancedTransaction> {
+        return wallet
+          .balanceAndProveTransaction(
+            ZswapTransaction.deserialize(tx.serialize(getLedgerNetworkId()), getZswapNetworkId()),
+            newCoins,
+          )
+          .then((zswapTx) => Transaction.deserialize(zswapTx.serialize(getZswapNetworkId()), getLedgerNetworkId()))
+          .then(createBalancedTx);
+      },
+    },
+    midnightProvider: {
+      submitTx(tx: BalancedTransaction): Promise<TransactionId> {
+        return wallet.submitTransaction(tx);
+      },
+    },
+  };
+};
+
+/** @internal */
+// const connectToWallet = (logger: Logger): Promise<{ wallet: DAppConnectorWalletAPI; uris: ServiceUriConfig }> => {
+
+//   const uris = window.midnight?.mnLace.serviceUriConfig();
+//   const wallet = window.midnight?.mnLace.enable();
   
+//   return { wallet , uris };
+// };
+
+
+  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+  //   console.log(walletAndMidnightProvider);
+  //   return {
+  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+  //       privateStateStoreName:  'quick-starter-private-state',
+  //     }),
+  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+  //     walletProvider: walletAndMidnightProvider,
+  //     midnightProvider: walletAndMidnightProvider,
+  //   };
+  // };
+
