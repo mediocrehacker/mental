@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
 // import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import Layout from "../components/Layout"
@@ -12,8 +12,9 @@ import WalletButton from "../components/WalletButton";
 export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [contract, setContract] = useState('');
 
-    const handleConnect = async () => {
+  const handleConnect = async () => {
     let isConnected = false;
     let address = null;
     try {
@@ -39,18 +40,34 @@ export const Admin = () => {
     setIsConnected(false);
   };
 
-  // const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
-  //   return {
-  //     privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
-  //       privateStateStoreName:  'quick-starter-private-state',
-  //     }),
-  //     publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
-  //     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
-  //     proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
-  //     walletProvider: walletAndMidnightProvider,
-  //     midnightProvider: walletAndMidnightProvider,
-  //   };
-  // };
+  // useEffect(() => {
+  // }, []);
+
+  const getProviders = async (walletAndMidnightProvider): Promise<PHQProviders> => {
+    return {
+      privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+        privateStateStoreName:  'quick-starter-private-state',
+      }),
+      publicDataProvider: indexerPublicDataProvider('http://127.0.0.1:8088/api/v1/graphql', 'ws://127.0.0.1:8088/api/v1/graphql/ws'),
+      zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
+      proofProvider: httpClientProofProvider('http://127.0.0.1:6300'),
+      walletProvider: walletAndMidnightProvider,
+      midnightProvider: walletAndMidnightProvider,
+    };
+  };
+
+
+  const handleDeploy = async () => {
+    try {
+      const wallet = await window.midnight?.mnLace;
+      getProviders(wallet)
+    } catch (error) {
+      console.log("An error occurred while deploy:", error.reason || error);
+    }
+
+    setContract("data.access_contract");
+  };
+
 
 //   const onDeploy: () => Promise<void> = async () => {
 //     const provider = getProviders(window.midnight);
@@ -68,20 +85,21 @@ export const Admin = () => {
           onConnect={handleConnect}
           onDisconnect={handleDisconnect}
         />}
-        center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        // center={<DeployContract />}
+        // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
+        center={<DeployContract contract={contract} handleDeploy={handleDeploy} />}
       /> 
     </>
   );
 
 }
 
-const DeployContract = () => {
+const DeployContract = ({contract, handleDeploy}) => {
   return (
     <>
       <div className="flex w-full">
-        <button className="btn" onClick={onDeploy}>TBD: Deploy Contract</button>
+        <button className="btn" onClick={handleDeploy} >TBD: Deploy Contract</button>
       </div>
+      <p>{contract}</p>
     </>
   )
 }
