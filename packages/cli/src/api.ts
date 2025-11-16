@@ -16,7 +16,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type ContractAddress } from '@midnight-ntwrk/compact-runtime';
-import { PHQ, type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
+import { Contract, type PHQPrivateState, createPHQPrivateState, witnesses, ledger } from '@quick-starter/phq-contract';
 import { type CoinInfo, nativeToken, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
 import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
@@ -64,12 +64,12 @@ export const getPHQLedgerState = async (
   logger.info('Checking contract ledger state...');
   const state = await providers.publicDataProvider
     .queryContractState(contractAddress)
-    .then((contractState) => (contractState != null ? PHQ.ledger(contractState.data).depressionLevel : null));
+    .then((contractState) => (contractState != null ? ledger(contractState.data).depressionLevel : null));
   logger.info(`Ledger state: ${state}`);
   return state;
 };
 
-export const phqContractInstance: PHQContract = new PHQ.Contract(witnesses);
+export const phqContractInstance: PHQContract = new Contract(witnesses);
 
 export const joinContract = async (
   providers: PHQProviders,

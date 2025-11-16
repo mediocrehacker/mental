@@ -1,26 +1,10 @@
-// TODO: Only for folder structure. Adjust QuickStarterPrivateStateId based on your implementation. 
-// Common types and constants
-
-// This file is part of midnightntwrk/example-counter.
-// Copyright (C) 2025 Midnight Foundation
-// SPDX-License-Identifier: Apache-2.0
-// Licensed under the Apache License, Version 2.0 (the "License");
-// You may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type ContractAddress } from '@midnight-ntwrk/compact-runtime';
-import { type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
-import * as PHQ  from '../../contract/dist/managed/phq/contract/index.cjs';
+import { Contract, type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
+
+// import { PHQ, type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
+// import * as PHQ  from '../../contract/dist/managed/phq/contract/index.cjs';
 import { type CoinInfo, nativeToken, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
 import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import {
@@ -38,47 +22,20 @@ import { webcrypto } from 'crypto';
 import { type Logger } from 'pino';
 import * as Rx from 'rxjs';
 import { WebSocket } from 'ws';
-// import {
-  // type PHQContract,
-  // type PHQPrivateStateId,
-  // type PHQProviders,
-  // type DeployedPHQContract,
-// } from './common-types';
+import {
+  type PHQContract,
+  type PHQPrivateStateId,
+  type PHQProviders,
+  type DeployedPHQContract,
+} from './common-types';
 // import { type Config, contractConfig } from './config';
 import { assertIsContractAddress, toHex } from '@midnight-ntwrk/midnight-js-utils';
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
-// import * as fsAsync from 'node:fs/promises';
-// import * as fs from 'node:fs';
-
-// export const getPHQLedgerState = async (
-//   providers: PHQProviders,
-//   contractAddress: ContractAddress,
-// ): Promise<bigint | null> => {
-//   assertIsContractAddress(contractAddress);
-//   logger.info('Checking contract ledger state...');
-//   const state = await providers.publicDataProvider
-//     .queryContractState(contractAddress)
-//     .then((contractState) => (contractState != null ? PHQ.ledger(contractState.data).depressionLevel : null));
-//   logger.info(`Ledger state: ${state}`);
-//   return state;
-// };
-
-import type { ImpureCircuitId, MidnightProviders } from '@midnight-ntwrk/midnight-js-types';
-import type { DeployedContract, FoundContract } from '@midnight-ntwrk/midnight-js-contracts';
-
-export type PHQCircuits = ImpureCircuitId<PHQ.Contract<PHQPrivateState>>;
-
-export const PHQPrivateStateId = 'phqPrivateState';
-
-export type PHQProviders = MidnightProviders<PHQCircuits, typeof PHQPrivateStateId, PHQPrivateState>;
-
-export type PHQContract = PHQ.Contract<PHQPrivateState>;
-
-export type DeployedPHQContract = DeployedContract<PHQContract> | FoundContract<PHQContract>;
 
 
+// export const phqContractInstance: PHQContract = new PHQ.Contract(witnesses);
+export const phqContractInstance: PHQContract = new Contract(witnesses);
 
-export const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
 
 export const joinContract = async (
   providers: PHQProviders,
@@ -416,4 +373,21 @@ export const deploy = async (
 //   }
 // };
 
-export const QuickStarterPrivateStateId = 'quick-starter-private-state';
+// export const QuickStarterPrivateStateId = 'quick-starter-private-state';
+
+// import * as fsAsync from 'node:fs/promises';
+// import * as fs from 'node:fs';
+
+// export const getPHQLedgerState = async (
+//   providers: PHQProviders,
+//   contractAddress: ContractAddress,
+// ): Promise<bigint | null> => {
+//   assertIsContractAddress(contractAddress);
+//   logger.info('Checking contract ledger state...');
+//   const state = await providers.publicDataProvider
+//     .queryContractState(contractAddress)
+//     .then((contractState) => (contractState != null ? PHQ.ledger(contractState.data).depressionLevel : null));
+//   logger.info(`Ledger state: ${state}`);
+//   return state;
+// };
+
