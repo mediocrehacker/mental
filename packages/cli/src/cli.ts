@@ -24,6 +24,9 @@ import { type Config, StandaloneConfig } from './config';
 import * as api from './api';
 import { createPHQPrivateState, setPHQPrivateState } from '@quick-starter/phq-contract';
 import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
+// import { ContractInstance ,type DeployedPHQContract, type PHQPrivateStateId, type PHQProviders, deploy, joinContract } from '@quick-starter/quick-starter-api';
+import { deploy } from '@quick-starter/quick-starter-api';
+import { nativeToken } from '@midnight-ntwrk/zswap';
 
 let logger: Logger;
 
@@ -62,7 +65,7 @@ const deployOrJoin = async (providers: PHQProviders, rli: Interface): Promise<De
     switch (choice) {
       case '1':
         logger.info(providers);
-        return await api.deploy(providers, createPHQPrivateState());
+        return await deploy(providers, createPHQPrivateState());
       case '2':
         logger.info(providers);
         return await join(providers, rli);
@@ -167,6 +170,23 @@ export const run = async (config: Config, _logger: Logger, dockerEnv?: DockerCom
   try {
     if (wallet !== null) {
       const providers = await api.configureProviders(wallet, config);
+      
+      try {
+        const transferRecipe = await wallet.transferTransaction([
+          {
+            amount: 100n,
+            type: nativeToken(),
+            receiverAddress: 'mn_shield-addr_undeployed167gnhk3ggkltgcq2npx86wljhh50j9pj6fwlv83p7e2dmgnwgm0qxqqyddr8s9qgy3vdne205vtk5ukkw86zxanlmyj6sr8z9lxzffvz35q9079y' // Example Bech32m address
+          }
+        ]);
+
+        const provenTransaction = await wallet.proveTransaction(transferRecipe);
+        const submittedTransaction = await wallet.submitTransaction(provenTransaction);
+
+        console.log('Transaction submitted:', submittedTransaction);
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
       await mainLoop(providers, rli);
     }
   } catch (e) {

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 
-import { Transaction as ZswapTransaction } from '@midnight-ntwrk/zswap';
-import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
-import { type CoinInfo, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
+import { deployContract, findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
+import * as Rx from 'rxjs';
 import {
   type BalancedTransaction,
   createBalancedTx,
-  type PrivateStateProvider,
-  type ProofProvider,
-  type PublicDataProvider,
+  type FinalizedTxData,
+  type MidnightProvider,
   type UnbalancedTransaction,
+  type WalletProvider,
 } from '@midnight-ntwrk/midnight-js-types';
+import { type Wallet } from '@midnight-ntwrk/wallet-api';
+import { Transaction as ZswapTransaction } from '@midnight-ntwrk/zswap';
+import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
+import { type CoinInfo, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { pipe as fnPipe } from 'fp-ts/function';
 import { pino, type Logger } from 'pino';
@@ -20,8 +23,8 @@ import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-import { type PHQProviders, deploy, joinContract } from '@quick-starter/quick-starter-api';
-import { type PHQPrivateState, createPHQPrivateState, witnesses, setPHQPrivateState } from '@quick-starter/phq-contract';
+import { phqContractInstance ,type DeployedPHQContract, type PHQPrivateStateId, type PHQProviders, deploy, joinContract } from '@quick-starter/quick-starter-api';
+import { type PHQPrivateState, createPHQPrivateState, witnesses } from '@quick-starter/phq-contract';
 // import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
 // const { createPHQPrivateState, setPHQPrivateState } = contractModule;
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
@@ -78,15 +81,22 @@ export const Admin = () => {
   // const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
   // const privateState: PHQPrivateState = createPHQPrivateState();
 
-  // const deploy = async (
+  // const deploy_ = async (
   //   providers: PHQProviders,
   //   privateState: PHQPrivateState,
   // ): Promise<DeployedPHQContract> => {
+  //   console.log(phqContractInstance);
+
+  //   console.log("phqContractInstance");
+
   //   const phqContract = await deployContract(providers, {
   //     contract: phqContractInstance,
   //     privateStateId: 'phqPrivateState',
   //     initialPrivateState: privateState,
   //   });
+
+  //   console.log(phqContract);
+
   //   return phqContract;
   // };
 
@@ -94,7 +104,9 @@ export const Admin = () => {
     try {
       const privateState: PHQPrivateState = createPHQPrivateState();
       const providers = await initializeProviders(logger)
-      console.log(providers);
+      const addr = "0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7"
+      // const xxx = await providers?.privateStateProvider.get(privateState)
+      // console.log(xxx);
 
       // const wallet = await window.midnight?.mnLace;
       // const providers = await getProviders(wallet);
@@ -275,36 +287,63 @@ const initializeProviders = async (logger: Logger): Promise<PHQProviders | null>
   }
 
   const walletState = await wallet.state();
-
+  const walletAndMidnightProvider = await createWalletAndMidnightProvider(wallet);
+  
   return {
-    privateStateProvider: levelPrivateStateProvider({
-      privateStateStoreName: 'phqPrivateState',
+    // privateStateProvider: levelPrivateStateProvider({
+    //   privateStateStoreName: 'PHQPrivateState',
+    // }),
+    privateStateProvider: levelPrivateStateProvider<typeof PHQPrivateStateId>({
+      privateStateStoreName: 'quick-starter-private-state',
+      // privateStateStoreName: contractConfig.privateStateStoreName,
     }),
-
     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
     // zkConfigProvider: new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window)),
     proofProvider: httpClientProofProvider(uris.proverServerUri),
     publicDataProvider: indexerPublicDataProvider(uris.indexerUri, uris.indexerWsUri),
-    walletProvider: {
-      coinPublicKey: walletState.coinPublicKey,
-      encryptionPublicKey: walletState.encryptionPublicKey,
-      balanceTx(tx: UnbalancedTransaction, newCoins: CoinInfo[]): Promise<BalancedTransaction> {
-        return wallet
-          .balanceAndProveTransaction(
-            ZswapTransaction.deserialize(tx.serialize(getLedgerNetworkId()), getZswapNetworkId()),
-            newCoins,
-          )
-          .then((zswapTx) => Transaction.deserialize(zswapTx.serialize(getZswapNetworkId()), getLedgerNetworkId()))
-          .then(createBalancedTx);
-      },
+    walletProvider: walletAndMidnightProvider,
+    midnightProvider: walletAndMidnightProvider,
+    // walletProvider: {
+    //   coinPublicKey: walletState.coinPublicKey,
+    //   encryptionPublicKey: walletState.encryptionPublicKey,
+    //   balanceTx(tx: UnbalancedTransaction, newCoins: CoinInfo[]): Promise<BalancedTransaction> {
+    //     return wallet
+    //       .balanceAndProveTransaction(
+    //         ZswapTransaction.deserialize(tx.serialize(getLedgerNetworkId()), getZswapNetworkId()),
+    //         newCoins,
+    //       )
+    //       .then((zswapTx) => Transaction.deserialize(zswapTx.serialize(getZswapNetworkId()), getLedgerNetworkId()))
+    //       .then(createBalancedTx);
+    //   },
+    // },
+    // midnightProvider: {
+    //   submitTx(tx: BalancedTransaction): Promise<TransactionId> {
+    //       providerCallback('submitTxStarted');
+    //       return wallet.submitTransaction(tx).finally(() => {
+    //         providerCallback('submitTxDone');
+    //       });
+    //   },
+    // },
+  };
+};
+
+export const createWalletAndMidnightProvider = async (wallet: any): Promise<WalletProvider & MidnightProvider> => {
+  const state = await wallet.state();
+  return {
+    coinPublicKey: state.coinPublicKey,
+    encryptionPublicKey: state.encryptionPublicKey,
+    balanceTx(tx: UnbalancedTransaction, newCoins: CoinInfo[]): Promise<BalancedTransaction> {
+      return wallet
+        .balanceTransaction(
+          ZswapTransaction.deserialize(tx.serialize(getLedgerNetworkId()), getZswapNetworkId()),
+          newCoins,
+        )
+        .then((tx) => wallet.proveTransaction(tx))
+        .then((zswapTx) => Transaction.deserialize(zswapTx.serialize(getZswapNetworkId()), getLedgerNetworkId()))
+        .then(createBalancedTx);
     },
-    midnightProvider: {
-      submitTx(tx: BalancedTransaction): Promise<TransactionId> {
-          providerCallback('submitTxStarted');
-          return wallet.submitTransaction(tx).finally(() => {
-            providerCallback('submitTxDone');
-          });
-      },
+    submitTx(tx: BalancedTransaction): Promise<TransactionId> {
+      return wallet.submitTransaction(tx);
     },
   };
 };

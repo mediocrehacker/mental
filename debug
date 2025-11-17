@@ -1,4 +1,5 @@
-:26:23.867] INFO (614314): Your wallet seed is: 6abd161d6bf9a341408b3b44f3bb266c44e7f38c235fb1a968f92bb46fed8195
+:26:23.867] INFO (614314): Your wallet seed is:
+6abd161d6bf9a341408b3b44f3bb266c44e7f38c235fb1a968f92bb46fed8195
 [21:26:23.868] INFO (614314): Your wallet address is: mn_shield-addr_test1kv2jax23e9xp8a3zm7nsd70xy4vvgm9sa56zeavfawgvgkcntshqxqqlcnga276u3qdrqq0ukkwu0w34z840wvgalcz5s9l5tm4sq20t2q5yp4j7
 
 > [21:48:14.939] INFO (637078): Deployed contract at address: 0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7
@@ -30,5 +31,29 @@ Y
     }
     midnightProvider: {
       "coinPublicKey": "mn_shield-cpk_test1kv2jax23e9xp8a3zm7nsd70xy4vvgm9sa56zeavfawgvgkcntshqncs75w",
-      "encryptionPublicKey": "mn_shield-epk_test1qvqpl3x364a4ezq6xqqledvac7ar2y027uc3mls9fqtlghhtqq57k5qy47nlg"
+      "encryptionPublicKey": "mn_shield-epk_test1qvqpl3x364a4ezq6xqqledvac7ar2y027uc3mls9fqtlghhtqq57k5qy47nlg
     }
+
+{
+    "privateStateProvider": {},
+    "zkConfigProvider": {
+        "baseURL": "http://localhost:5173"
+    },
+    "proofProvider": {},
+    "publicDataProvider": {},
+    "walletProvider": {
+        "coinPublicKey": "mn_shield-cpk_test1uh29hawpthg58yl06wmhzv0c53n6hsnssa884sswercn4rgnnhfqpm4kcq",
+        "encryptionPublicKey": "mn_shield-epk_test1qvqpjhk6xa6r6s2jyh7tes7j64r67dzq0ekfhavxtz5c0lu2nsqx48cygphns"
+    },
+    "midnightProvider": {}
+}
+
+
+{
+    "address": "mn_shield-addr_test1uh29hawpthg58yl06wmhzv0c53n6hsnssa884sswercn4rgnnhfqxqqetmdrwapag9fztl9uc0fd23a0x3q8umym7kr932v8l79fcqr2nu7jn8ey",
+    "addressLegacy": "e5d45bf5c15dd14393efd3b77131f8a467abc270874e7ac20ec8f13a8d139dd2|0300195eda37743d415225fcbcc3d2d547af34407e6c9bf58658a987ff8a9c006a9f",
+    "coinPublicKey": "mn_shield-cpk_test1uh29hawpthg58yl06wmhzv0c53n6hsnssa884sswercn4rgnnhfqpm4kcq",
+    "coinPublicKeyLegacy": "e5d45bf5c15dd14393efd3b77131f8a467abc270874e7ac20ec8f13a8d139dd2",
+    "encryptionPublicKey": "mn_shield-epk_test1qvqpjhk6xa6r6s2jyh7tes7j64r67dzq0ekfhavxtz5c0lu2nsqx48cygphns",
+    "encryptionPublicKeyLegacy": "0300195eda37743d415225fcbcc3d2d547af34407e6c9bf58658a987ff8a9c006a9f"
+}

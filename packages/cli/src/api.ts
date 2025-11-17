@@ -90,19 +90,22 @@ export const joinContract = async (
   return phqContract;
 };
 
-export const deploy = async (
-  providers: PHQProviders,
-  privateState: PHQPrivateState,
-): Promise<DeployedPHQContract> => {
-  logger.info('Deploying phq contract...');
-  const phqContract = await deployContract(providers, {
-    contract: phqContractInstance,
-    privateStateId: 'phqPrivateState',
-    initialPrivateState: privateState,
-  });
-  logger.info(`Deployed contract at address: ${phqContract.deployTxData.public.contractAddress}`);
-  return phqContract;
-};
+// export const deploy = async (
+//   providers: PHQProviders,
+//   privateState: PHQPrivateState,
+// ): Promise<DeployedPHQContract> => {
+//   logger.info('Deploying phq contract...');
+//   logger.info(phqContractInstance);
+//   logger.info(privateState);
+
+//   const phqContract = await deployContract(providers, {
+//     contract: phqContractInstance,
+//     privateStateId: 'phqPrivateState',
+//     initialPrivateState: privateState,
+//   });
+//   logger.info(`Deployed contract at address: ${phqContract.deployTxData.public.contractAddress}`);
+//   return phqContract;
+// };
 
 export const depressionCheckup = async (
   providers: PHQProviders,
