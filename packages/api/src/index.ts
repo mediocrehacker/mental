@@ -32,6 +32,12 @@ import {
 import { assertIsContractAddress, toHex } from '@midnight-ntwrk/midnight-js-utils';
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 
+export {
+  type PHQContract,
+  type PHQPrivateStateId,
+  type PHQProviders,
+  type DeployedPHQContract,
+} from './common-types';
 
 // export const phqContractInstance: PHQContract = new PHQ.Contract(witnesses);
 export const phqContractInstance: PHQContract = new Contract(witnesses);

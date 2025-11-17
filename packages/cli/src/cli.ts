@@ -61,8 +61,10 @@ const deployOrJoin = async (providers: PHQProviders, rli: Interface): Promise<De
     const choice = await rli.question(DEPLOY_OR_JOIN_QUESTION);
     switch (choice) {
       case '1':
+        logger.info(providers);
         return await api.deploy(providers, createPHQPrivateState());
       case '2':
+        logger.info(providers);
         return await join(providers, rli);
       case '3':
         logger.info('Exiting...');

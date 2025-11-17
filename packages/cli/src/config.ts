@@ -1,4 +1,3 @@
-
 import path from 'node:path';
 import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { QuickStarterPrivateStateId } from './api';

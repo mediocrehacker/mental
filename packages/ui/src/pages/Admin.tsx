@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 
+import { Transaction as ZswapTransaction } from '@midnight-ntwrk/zswap';
 import { NetworkId, setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
-
+import { type CoinInfo, Transaction, type TransactionId } from '@midnight-ntwrk/ledger';
+import {
+  type BalancedTransaction,
+  createBalancedTx,
+  type PrivateStateProvider,
+  type ProofProvider,
+  type PublicDataProvider,
+  type UnbalancedTransaction,
+} from '@midnight-ntwrk/midnight-js-types';
 import { getLedgerNetworkId, getZswapNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { pipe as fnPipe } from 'fp-ts/function';
 import { pino, type Logger } from 'pino';
@@ -11,7 +20,7 @@ import WalletButton from "../components/WalletButton";
 // import DeployButton from "../components/DeployButton";
 
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
-import { deploy, joinContract } from '@quick-starter/quick-starter-api';
+import { type PHQProviders, deploy, joinContract } from '@quick-starter/quick-starter-api';
 import { type PHQPrivateState, createPHQPrivateState, witnesses, setPHQPrivateState } from '@quick-starter/phq-contract';
 // import * as contractModule from '../../../contract/src/managed/bboard/contract/index.cjs';
 // const { createPHQPrivateState, setPHQPrivateState } = contractModule;
@@ -85,9 +94,14 @@ export const Admin = () => {
     try {
       const privateState: PHQPrivateState = createPHQPrivateState();
       const providers = await initializeProviders(logger)
+      console.log(providers);
+
       // const wallet = await window.midnight?.mnLace;
       // const providers = await getProviders(wallet);
-      const deployedContract = await deploy(providers, privateState)
+      // console.log(providers);
+      if (providers) {
+        const deployedContract = await deploy(providers, privateState)
+      }
       // const addr = "0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7"
       // console.log("Address:", addr);
       // const contract = await joinContract(providers, addr)
@@ -201,12 +215,52 @@ const RatingLoading = ({rating}) => {
   )
 }
 
+export type ProviderCallbackAction =
+  | 'downloadProverStarted'
+  | 'downloadProverDone'
+  | 'proveTxStarted'
+  | 'proveTxDone'
+  | 'balanceTxStarted'
+  | 'balanceTxDone'
+  | 'submitTxStarted'
+  | 'submitTxDone'
+  | 'watchForTxDataStarted'
+  | 'watchForTxDataDone';
+
+
+const setSnackBarText = (txt) => {
+  console.log(txt);
+}
+  
+const providerCallback: (action: ProviderCallbackAction) => void = (action: ProviderCallbackAction): void => {
+    if (action === 'proveTxStarted') {
+      setSnackBarText('Proving transaction...');
+    } else if (action === 'proveTxDone') {
+      setSnackBarText(undefined);
+    } else if (action === 'balanceTxStarted') {
+      setSnackBarText('Signing the transaction with Midnight Lace wallet...');
+    } else if (action === 'downloadProverDone') {
+      setSnackBarText(undefined);
+    } else if (action === 'downloadProverStarted') {
+      setSnackBarText('Downloading prover key...');
+    } else if (action === 'balanceTxDone') {
+      setSnackBarText(undefined);
+    } else if (action === 'submitTxStarted') {
+      setSnackBarText('Submitting transaction...');
+    } else if (action === 'submitTxDone') {
+      setSnackBarText(undefined);
+    } else if (action === 'watchForTxDataStarted') {
+      setSnackBarText('Waiting for transaction finalization on blockchain...');
+    } else if (action === 'watchForTxDataDone') {
+      setSnackBarText(undefined);
+    }
+  };
+
 /** @internal */
-const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
+const initializeProviders = async (logger: Logger): Promise<PHQProviders | null> => {
   const uris = await window.midnight?.mnLace.serviceUriConfig();
   const wallet = await window.midnight?.mnLace.enable();
 
-  const walletState = await wallet.state();
   // const zkConfigPath = window.location.origin; // '../../../contract/src/managed/bboard';
 
       console.log(`Connecting to wallet with network ID: ${getLedgerNetworkId()}`);
@@ -214,11 +268,19 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
       console.log(`Connecting to wallet with network ID: ${NetworkId.Undeployed}`);
       console.log(`Connecting to wallet with network ID: ${NetworkId.TestNet}`);
 
+      console.log(uris);
+
+  if (!uris || !wallet) {
+    return null;
+  }
+
+  const walletState = await wallet.state();
 
   return {
     privateStateProvider: levelPrivateStateProvider({
-      privateStateStoreName: 'quick-starter-private-state',
+      privateStateStoreName: 'phqPrivateState',
     }),
+
     zkConfigProvider: new FetchZkConfigProvider<'depressionCheckup'>(window.location.origin, fetch.bind(window)),
     // zkConfigProvider: new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window)),
     proofProvider: httpClientProofProvider(uris.proverServerUri),
@@ -238,7 +300,10 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
     },
     midnightProvider: {
       submitTx(tx: BalancedTransaction): Promise<TransactionId> {
-        return wallet.submitTransaction(tx);
+          providerCallback('submitTxStarted');
+          return wallet.submitTransaction(tx).finally(() => {
+            providerCallback('submitTxDone');
+          });
       },
     },
   };

@@ -4,3 +4,31 @@
 > [21:48:14.939] INFO (637078): Deployed contract at address: 0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7
 
 Y
+
+6abd161d6bf9a341408b3b44f3bb266c44e7f38c235fb1a968f92bb46fed8195
+
+
+0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7
+
+
+
+
+
+
+
+
+[13:03:00.753] INFO (1202671):
+    privateStateProvider: {}
+    publicDataProvider: {}
+    zkConfigProvider: {
+      "directory": "/home/dima.sukhikh/study/midnight/mental/packages/contract/src/managed/phq"
+    }
+    proofProvider: {}
+    walletProvider: {
+      "coinPublicKey": "mn_shield-cpk_test1kv2jax23e9xp8a3zm7nsd70xy4vvgm9sa56zeavfawgvgkcntshqncs75w",
+      "encryptionPublicKey": "mn_shield-epk_test1qvqpl3x364a4ezq6xqqledvac7ar2y027uc3mls9fqtlghhtqq57k5qy47nlg"
+    }
+    midnightProvider: {
+      "coinPublicKey": "mn_shield-cpk_test1kv2jax23e9xp8a3zm7nsd70xy4vvgm9sa56zeavfawgvgkcntshqncs75w",
+      "encryptionPublicKey": "mn_shield-epk_test1qvqpl3x364a4ezq6xqqledvac7ar2y027uc3mls9fqtlghhtqq57k5qy47nlg"
+    }
