@@ -17,6 +17,8 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import { Home } from "./pages/Home";
 import { Admin } from "./pages/Admin";
 import { User } from "./pages/User";
+import { Checkup } from "./pages/Checkup";
+
 
 const root = document.getElementById("root");
 
@@ -26,6 +28,7 @@ ReactDOM.createRoot(root).render(
       <Route index element={<Home />} />
       <Route path="admin" element={<Admin />} />
       <Route path="user" element={<User />} />
+      <Route path="checkup" element={<Checkup />} />
     </Routes>
   </BrowserRouter>,
 );

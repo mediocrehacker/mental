@@ -24,7 +24,7 @@ import {
   type ServiceUriConfig,
 } from '@midnight-ntwrk/dapp-connector-api';
 
-export const User = () => {
+export const Checkup = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [contract, setContract] = useState('');
@@ -66,21 +66,6 @@ export const User = () => {
   // useEffect(() => {
   // }, []);
 
-  // const phqContractInstance: PHQContract = new PHQ.default.Contract(witnesses);
-  // const privateState: PHQPrivateState = createPHQPrivateState();
-
-  // const deploy = async (
-  //   providers: PHQProviders,
-  //   privateState: PHQPrivateState,
-  // ): Promise<DeployedPHQContract> => {
-  //   const phqContract = await deployContract(providers, {
-  //     contract: phqContractInstance,
-  //     privateStateId: 'phqPrivateState',
-  //     initialPrivateState: privateState,
-  //   });
-  //   return phqContract;
-  // };
-
   const handleDeploy = async () => {
     try {
       const privateState: PHQPrivateState = createPHQPrivateState();
@@ -112,111 +97,63 @@ export const User = () => {
       
     <>
       <Layout
-        navbar={<WalletButton
-          isConnected={isConnected}
-          walletAddress={walletAddress}
-          onConnect={handleConnect}
-          onDisconnect={handleDisconnect}
-        />}
-        // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        center={<Dashboard contract={contract} handleDeploy={handleDeploy} />}
-
+        navbar={<></>}
+        center={<DepressionCheckup />}
       /> 
     </>
   );
 
 }
 
-const DeployContract = ({contract, handleDeploy}) => {
+const DepressionCheckup = () => {
   return (
-    <>
-      <div className="flex">
-        <button className="btn btn-link" onClick={handleDeploy} >Deploy Contract</button>
-      </div>
-    </>
-  )
-}
-
-const Dashboard = ({contract, handleDeploy}) => {
-  return (
-    <>
-      <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
-        <div className="col-span-3 col-start-2 place-items-center gap-4">
-            <div className="radial-progress  m-8"
-              style={{ "--value": "0", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
-              aria-valuenow={0} role="progressbar">0</div>
-            <div className="flex flex-col"><h2 className="text-2xl">Mental Score</h2>
-              <p>{contract}</p></div>
-        </div>
-
-        <div className="col-span-2 row-start-2">
-          <Rating rating={{ name: "Depression", level: 0, mask: "mask-star-2"}} />
-        </div>
-        <div className="col-span-2 col-start-4 row-start-2"><Rating rating={{ name: "Anxiety", level: 0, mask: "mask-heart"}} />
-</div>
-        <div className="col-span-2 row-start-3"><Rating rating={{ name: "Somatic", level: 0, mask: "mask-star-2"}} />
-</div>
-        <div className="col-span-2 col-start-4 row-start-3"><Rating rating={{ name: "Burnout", level: 0, mask: "mask-star-2"}} />
-</div>
-        <div className="col-span-5 row-start-4">
-          <div className="flex gap-4 w-full">
-          <input type="text" placeholder="neutral" className="input w-96" />
-            <Link className="btn"
+  <>
+    <div className="place-items-center gap-4">
+      <h2 className="text-xl">PATIENT HEALTH QUESTIONNAIRE-9 (PHQ-9)</h2>
+      <p>Over the last 2 weeks, how often have you been bothered by any of the following problems?</p>
+      <Question qid="1" question={"Little interest or pleasure in doing things"}/>
+      <Question qid="2" question="Feeling down, depressed, or hopeless" />
+      <Question qid="2" question="Trouble falling or staying asleep, or sleeping too much" />
+      <Question qid="4" question="Feeling tired or having little energy" />
+      <Question qid="5" question="Poor appetite or overeating" />
+      <Question qid="6" question="Feeling bad about yourself — or that you are a failure or have let yourself or your family down" />
+      <Question qid="7" question="Trouble concentrating on things, such as reading the newspaper or watching television" />
+      <Question qid="8" question="Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual" />
+      <Question qid="9" question="Thoughts that you would be better off dead or of hurting yourself in some way" />
+      <p><Link className="btn btn-primary"
               to={{
-                pathname: "/checkup",
+                pathname: "/user",
               }}
-            >Join Contract</Link>
-          </div>
+      >Submit</Link></p>
 
-        </div>
-      </div>
-    </>
+    </div>
+  </>
   )
 }
 
-const DashboardLoading = () => {
+const Question = ({qid, question }) => {
   return (
-    <>
-      <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
-        <div className="col-span-3 col-start-2 place-items-center gap-4">
-            <div className="skeleton radial-progress  m-8"
-              style={{ "--value": "100", "--size": "12rem", "--thickness": "0px" } /* as React.CSSProperties */ } 
-              aria-valuenow={70} role="progressbar"></div>
-            <h2 className="text-2xl">Mental Score</h2>
-        </div>
-        
-        <div className="col-span-2 row-start-2"><RatingLoading rating={{ name: "Depression", mask: "mask-star-2"}} /></div>
-        <div className="col-span-2 col-start-4 row-start-2"><RatingLoading rating={{ name: "Anxiety", mask: "mask-heart"}} /></div>
-        <div className="col-span-2 row-start-3"><RatingLoading rating={{ name: "Somatic", mask: "mask-star-2"}} /></div>
-        <div className="col-span-2 col-start-4 row-start-3"><RatingLoading rating={{ name: "Burnout", mask: "mask-star-2"}} /></div>
-        <div className="col-span-5 row-start-4"></div>
-      </div>
-    </>
+  <>
+<div className="w-full max-w-2xl mx-auto my-8">
+    <label className="text-muted ">
+        {qid}. {question}
+    </label>
+    <div className="flex flex-auto justify-evenly  rounded-md w-full my-2">
+      <input type="radio" name={qid} className="radio" />
+      <label className="cursor-pointer" for={question}>Not at all</label>
+      <input type="radio" name={qid} className="radio" />
+      <label className="cursor-pointer" for={question}>Several days</label>
+      <input type="radio" name={qid} className="radio" />
+      <label className="cursor-pointer" for={question}>More than half</label>
+      <input type="radio" name={qid} className="radio" />
+      <label className="cursor-pointer" for={question}>Nearly every day</label>
+    </div>
+    
+    </div>
+  </>
   )
 }
 
-
-const Rating = ({rating}) => {
-  return(
-    <>
-      <div className="place-items-center">
-        <progress className="progress  w-76" value={rating.level} max="100"></progress>
-        <h2 className="text-xl">{rating.name}</h2>
-      </div>
-    </>
-  )
-}
-  
-const RatingLoading = ({rating}) => {
-  return(
-    <>
-      <div className="place-items-center">
-        <progress className="progress  w-76"></progress>
-        <h2 className="text-xl">{rating.name}</h2>
-      </div>
-    </>
-  )
-}
 
 /** @internal */
 const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
