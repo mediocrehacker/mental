@@ -28,6 +28,7 @@ export const Admin = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [contract, setContract] = useState('');
+  const [depression, setDepression] = useState(0);
 
   const logger = pino({
     browser: {
@@ -119,7 +120,7 @@ export const Admin = () => {
           onDisconnect={handleDisconnect}
         />}
         // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        center={<Dashboard contract={contract} handleDeploy={handleDeploy} />}
+        center={<Dashboard contract={contract} handleDeploy={handleDeploy} depression={depression} setDepression={setDepression} />}
 
       /> 
     </>
@@ -137,21 +138,21 @@ const DeployContract = ({contract, handleDeploy}) => {
   )
 }
 
-const Dashboard = ({contract, handleDeploy}) => {
+const Dashboard = ({contract, handleDeploy, depression, setDepression}) => {
   return (
     <>
       <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
-        <div className="col-span-3 col-start-2 place-items-center gap-4">
+         <div className="col-span-3 col-start-2 place-items-center gap-4">
             <div className="radial-progress  m-8"
-              style={{ "--value": "0", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
-              aria-valuenow={0} role="progressbar">0</div>
-            <div className="flex flex-col"><h2 className="text-2xl">Mental Score</h2>
-              </div>
+              style={{ "--value": `${depression}`, "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
+              aria-valuenow={0} role="progressbar">{depression}</div>
+            <div className="flex flex-col"><h2 className="text-2xl" onClick={() => setDepression(77)}>Mental Score</h2>
+            </div>
         </div>
 
 
         <div className="col-span-2 row-start-2">
-          <Rating rating={{ name: "Depression", level: 0, mask: "mask-star-2"}} />
+          <Rating rating={{ name: "Depression", level: `${depression}`, mask: "mask-star-2"}} />
           <DeployContract contract={contract} handleDeploy={handleDeploy} />
         </div>
         <div className="col-span-2 col-start-4 row-start-2"><Rating rating={{ name: "Anxiety", level: 0, mask: "mask-heart"}} />
