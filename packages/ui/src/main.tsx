@@ -16,6 +16,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Home } from "./pages/Home";
 import { Admin } from "./pages/Admin";
+import { User } from "./pages/User";
 
 const root = document.getElementById("root");
 
@@ -24,6 +25,7 @@ ReactDOM.createRoot(root).render(
     <Routes>
       <Route index element={<Home />} />
       <Route path="admin" element={<Admin />} />
+      <Route path="user" element={<User />} />
     </Routes>
   </BrowserRouter>,
 );

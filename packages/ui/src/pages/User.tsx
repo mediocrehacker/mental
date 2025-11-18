@@ -24,7 +24,7 @@ import {
   type ServiceUriConfig,
 } from '@midnight-ntwrk/dapp-connector-api';
 
-export const Admin = () => {
+export const User = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [contract, setContract] = useState('');
@@ -146,24 +146,25 @@ const Dashboard = ({contract, handleDeploy}) => {
               style={{ "--value": "0", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
               aria-valuenow={0} role="progressbar">0</div>
             <div className="flex flex-col"><h2 className="text-2xl">Mental Score</h2>
-              </div>
+              <p>{contract}</p></div>
         </div>
-
 
         <div className="col-span-2 row-start-2">
           <Rating rating={{ name: "Depression", level: 0, mask: "mask-star-2"}} />
-          <DeployContract contract={contract} handleDeploy={handleDeploy} />
         </div>
         <div className="col-span-2 col-start-4 row-start-2"><Rating rating={{ name: "Anxiety", level: 0, mask: "mask-heart"}} />
-          <DeployContract contract={contract} handleDeploy={handleDeploy} />
 </div>
         <div className="col-span-2 row-start-3"><Rating rating={{ name: "Somatic", level: 0, mask: "mask-star-2"}} />
-          <DeployContract contract={contract} handleDeploy={handleDeploy} />
 </div>
         <div className="col-span-2 col-start-4 row-start-3"><Rating rating={{ name: "Burnout", level: 0, mask: "mask-star-2"}} />
-          <DeployContract contract={contract} handleDeploy={handleDeploy} />
 </div>
-        <div className="col-span-5 row-start-4"><p>{contract}</p></div>
+        <div className="col-span-5 row-start-4">
+          <div className="flex gap-4 w-full">
+          <input type="text" placeholder="neutral" className="input w-96" />
+          <button className="btn btn">Join Contract</button>
+          </div>
+
+        </div>
       </div>
     </>
   )
