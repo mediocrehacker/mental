@@ -97,7 +97,8 @@ export const Admin = () => {
       console.log("An error occurred while deploy:", error.reason || error);
     }
 
-    setContract("data.access_contract");
+    // for demo purpose:
+    setContract("0200274d3fa23083f93a6cc352ea5ef3eb084366bcabd6ab864e7ff2b93837c025c7");
   };
 
 
@@ -118,7 +119,8 @@ export const Admin = () => {
           onDisconnect={handleDisconnect}
         />}
         // center={isConnected  ? <Dashboard /> : <DashboardLoading />}
-        center={<DeployContract contract={contract} handleDeploy={handleDeploy} />}
+        center={<Dashboard contract={contract} handleDeploy={handleDeploy} />}
+
       /> 
     </>
   );
@@ -128,29 +130,39 @@ export const Admin = () => {
 const DeployContract = ({contract, handleDeploy}) => {
   return (
     <>
-      <div className="flex w-full">
-        <button className="btn" onClick={handleDeploy} >TBD: Deploy Contract</button>
+      <div className="flex">
+        <button className="btn btn-link" onClick={handleDeploy} >Deploy Contract</button>
       </div>
-      <p>{contract}</p>
     </>
   )
 }
 
-const Dashboard = () => {
+const Dashboard = ({contract, handleDeploy}) => {
   return (
     <>
       <div className="grid grid-cols-5 grid-rows-4 gap-4 place-items-center ">
         <div className="col-span-3 col-start-2 place-items-center gap-4">
             <div className="radial-progress  m-8"
-              style={{ "--value": "70", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
-              aria-valuenow={70} role="progressbar">70%</div>
-            <h2 className="text-2xl">Mental Score</h2>
+              style={{ "--value": "0", "--size": "12rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
+              aria-valuenow={0} role="progressbar">0</div>
+            <div className="flex flex-col"><h2 className="text-2xl">Mental Score</h2>
+              <p>{contract}</p></div>
         </div>
-        
-        <div className="col-span-2 row-start-2"><Rating rating={{ name: "Depression", level: 77, mask: "mask-star-2"}} /></div>
-        <div className="col-span-2 col-start-4 row-start-2"><Rating rating={{ name: "Anxiety", level: 77, mask: "mask-heart"}} /></div>
-        <div className="col-span-2 row-start-3"><Rating rating={{ name: "Somatic", level: 77, mask: "mask-star-2"}} /></div>
-        <div className="col-span-2 col-start-4 row-start-3"><Rating rating={{ name: "Burnout", level: 77, mask: "mask-star-2"}} /></div>
+
+
+        <div className="col-span-2 row-start-2">
+          <Rating rating={{ name: "Depression", level: 0, mask: "mask-star-2"}} />
+          <DeployContract contract={contract} handleDeploy={handleDeploy} />
+        </div>
+        <div className="col-span-2 col-start-4 row-start-2"><Rating rating={{ name: "Anxiety", level: 0, mask: "mask-heart"}} />
+          <DeployContract contract={contract} handleDeploy={handleDeploy} />
+</div>
+        <div className="col-span-2 row-start-3"><Rating rating={{ name: "Somatic", level: 0, mask: "mask-star-2"}} />
+          <DeployContract contract={contract} handleDeploy={handleDeploy} />
+</div>
+        <div className="col-span-2 col-start-4 row-start-3"><Rating rating={{ name: "Burnout", level: 0, mask: "mask-star-2"}} />
+          <DeployContract contract={contract} handleDeploy={handleDeploy} />
+</div>
         <div className="col-span-5 row-start-4"></div>
       </div>
     </>
@@ -183,7 +195,7 @@ const Rating = ({rating}) => {
   return(
     <>
       <div className="place-items-center">
-        <progress className="progress  w-76" value="70" max="100"></progress>
+        <progress className="progress  w-76" value={rating.level} max="100"></progress>
         <h2 className="text-xl">{rating.name}</h2>
       </div>
     </>
